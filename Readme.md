@@ -1,3 +1,3 @@
-##Python Flask API
+Python Flask API
 
-#Simple REST APIs for API testing. 
+Simple REST APIs for API testing. 
