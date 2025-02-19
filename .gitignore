@@ -1,2 +1,10 @@
 .devcontainer/
 _pycahce_/
+user_credentials.db
+app/_pycahce_/
+app/docs/_pycahce_/
+app/models/_pycahce_/
+app/utils/_pycahce_/
+app/routes/_pycahce_/
+app/db/_pycahce_/
+app/tests/_pycahce_/

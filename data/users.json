@@ -1,1 +1,0 @@
-{"user": {"username": "string", "email": "string", "full_name": "string", "role": "string", "disabled": true, "password": "string"}, "string": {"username": "string", "full_name": "string", "email": "string", "role": "string", "hashed_password": "$2b$12$SP.VlblirFyup5Bamncxt.HgMBy4KsM6bKAfoyfSTYAm0grQMIocy", "disabled": false}}
