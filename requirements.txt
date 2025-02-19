@@ -6,3 +6,6 @@ passlib[bcrypt]
 databases[sqlite]
 sqlalchemy
 slowapi
+PyJWT
+pydantic
+python-dotenv
