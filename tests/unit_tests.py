@@ -1,7 +1,7 @@
 import requests
 from requests.auth import HTTPBasicAuth
 
-url = "http://127.0.0.1:8000/"
+url = "https://python-flask-apis.onrender.com/"
 
 def test_secure_data_view():
     response = requests.get(url+"secure-data-view", auth=HTTPBasicAuth("testuser","secret"))
@@ -57,7 +57,6 @@ def test_secure_data_jwt_admin(access_token):
 
 def test_rate_limit():
     for i in range(1):
-        print(i)
         response = requests.get(url+"secure-data-view", auth=HTTPBasicAuth("testuser","secret"))
         print(response.status_code,response.text)
         assert response.status_code==200
@@ -65,8 +64,6 @@ def test_rate_limit():
     print(response.status_code,response.text)
     assert response.status_code==429
 
-            
-   
 
 test_secure_data_view()
 test_secure_data_admin()
