@@ -9,3 +9,4 @@ slowapi
 PyJWT
 pydantic
 python-dotenv
+requests
