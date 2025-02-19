@@ -4,6 +4,5 @@ python-multipart
 python-jose[crypotgraphy]
 passlib[bcrypt]
 databases[sqlite]
-sqlalchemy 
-sqlite3 
+sqlalchemy
 slowapi
