@@ -1,4 +1,5 @@
 import bcrypt, jwt
+import json
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.security import HTTPBasic
@@ -6,22 +7,20 @@ from fastapi import Depends, HTTPException
 from datetime import datetime, timedelta
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer
-from dotenv import load_dotenv
 from app.models.basemodel import *
 from app.db.database import *
 
-
+# basic auth
 security = HTTPBasic()
-load_dotenv()
 
+# for jwt
 SECRET_KEY = "83daa0256a2289b0fb23693bf1f6034d44396675749244721a2b20e896e11662"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
-
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
-
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+# create access token with the time limit
 def create_access_token(data: dict, expires_delta: timedelta = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)):
     to_encode = data.copy()
     expire = datetime.utcnow() + expires_delta
@@ -29,12 +28,14 @@ def create_access_token(data: dict, expires_delta: timedelta = timedelta(minutes
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
+# before issuing token, we need to validate username and password
 def authenticate_user(username: str, password: str):
     if username!="testuser" and username!="testuser2":
         raise HTTPException(status_code=401, detail="Invalid credentials")
     username = authenticate_user_for_token(username,password)
     return username
 
+# to validate token for jwt.
 def get_current_user(token: str = Depends(oauth2_scheme)):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -44,14 +45,17 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
         return username
     except jwt.PyJWTError:
         raise HTTPException(status_code=401, detail="Invalid credentials")
-
+    
+#to validate basic auth password.
 def hash_password(password: str) -> str:
     salt = bcrypt.gensalt()
     return bcrypt.hashpw(password.encode(), salt).decode()
 
+#to validate jwt auth password.
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
+#to validate password before issuing token for jwt.
 def authenticate_user_for_token(username,password):
     con = get_db()
     cursor = con.cursor()
@@ -65,7 +69,8 @@ def authenticate_user_for_token(username,password):
             headers={"WWW-Authenticate": "Basic"},
         )
     return {"username": username}
-    
+
+# to validate credentials for basic auth.
 def authenticate_user_detail(credentials: HTTPBasicCredentials = Depends(security)):
     con = get_db()
     cursor = con.cursor()
@@ -80,11 +85,13 @@ def authenticate_user_detail(credentials: HTTPBasicCredentials = Depends(securit
         )
     return {"username": credentials.username}
 
+#to validate required role for the particular user- authorization (basicAuth).
 def require_role_ba(role: str):
     def role_checker(credentials: HTTPBasicCredentials = Depends(security)):
         return check_role(role,credentials.username)
     return role_checker
 
+#to validate required role for the particular user- authorization (JWT).
 def require_role_jwt(role: str):
     def role_checker(token: str = Depends(oauth2_scheme)):
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -92,6 +99,7 @@ def require_role_jwt(role: str):
         return check_role(role, username)
     return role_checker
 
+#to validate role.
 def check_role(role,user):
     con = get_db()
     cursor = con.cursor()
@@ -104,4 +112,16 @@ def check_role(role,user):
             detail="Access denied",
         )
     return user_detail["role"]
-    
+
+def convert_sql_result_to_json(db_name):
+    icon = get_inventory_db()
+    cursor = icon.cursor()
+    cursor.execute("Select * from %s"%(db_name))
+    all_items = cursor.fetchall()
+    columns = [desc[0] for desc in cursor.description]
+    result = {"all_items":[]}
+    icon.close()
+    for row in all_items:
+        result["all_items"].append(dict(zip(columns, row)))
+    return result
+
