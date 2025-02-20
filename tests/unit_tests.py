@@ -2,7 +2,7 @@ import requests
 from requests.auth import HTTPBasicAuth
 import json
 
-url = "http://127.0.0.1:8000/"
+url = "https://python-flask-apis.onrender.com/"
 
 def test_secure_data_view():
     print("\nTest no: 1, to test secure-data-view endpoint\n")
