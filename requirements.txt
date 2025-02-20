@@ -10,3 +10,4 @@ PyJWT
 pydantic
 python-dotenv
 requests
+pytest
