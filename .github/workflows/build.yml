@@ -37,7 +37,7 @@ jobs:
 
     - name: Build and Push Docker Image
       run: |
-        IMAGE_NAME=mydockerhub/my-microservice  # Change per service
+        IMAGE_NAME=adarsh247/ms-test
         TAG=${{ github.sha }}  # Use commit SHA as tag
         docker build -t $IMAGE_NAME:$TAG .
         docker push $IMAGE_NAME:$TAG
