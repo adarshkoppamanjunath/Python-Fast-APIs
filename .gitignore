@@ -5,7 +5,6 @@ app/__pycache__/
 app/db/__pycache__/
 app/models/__pycache__/
 app/routes/__pycache__/
-app/routes/inventory_crud.py
 app/utils/__pycache__/
 inventory.db
 tests/__pycache__
