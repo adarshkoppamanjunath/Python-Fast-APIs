@@ -8,13 +8,13 @@ def setup_db():
 
 #get db connection object
 def get_db():
-    con = sqlite3.connect("user_credentials.db")
+    con = sqlite3.connect("app/db_files/user_credentials.db")
     con.row_factory = sqlite3.Row
     return con
 
 #not being used atm
 def get_inventory_db():
-    icon = sqlite3.connect("inventory.db")
+    icon = sqlite3.connect("app/db_files/inventory.db")
     icon.row_factory = sqlite3.Row
     return icon    
 
