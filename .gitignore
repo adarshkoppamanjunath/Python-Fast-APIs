@@ -10,3 +10,5 @@ inventory.db
 tests/__pycache__
 app/docs/__pycache__/
 .pytest_cache/
+app/db_files/inventory.db
+app/db_files/user_credentials.db
