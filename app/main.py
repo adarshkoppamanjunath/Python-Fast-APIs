@@ -3,8 +3,12 @@ from app.docs.custom_docs import custom_openapi
 from slowapi.errors import RateLimitExceeded
 from starlette.responses import JSONResponse
 from slowapi import Limiter
+import logging
 from slowapi.util import get_remote_address
 from app.db.database import *
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logger = logging.getLogger(__name__)
 
 #create  app instance
 app = FastAPI(

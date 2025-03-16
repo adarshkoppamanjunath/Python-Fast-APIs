@@ -9,3 +9,4 @@ app/utils/__pycache__/
 inventory.db
 tests/__pycache__
 app/docs/__pycache__/
+.pytest_cache/

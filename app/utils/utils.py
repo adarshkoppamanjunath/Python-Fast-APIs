@@ -1,5 +1,6 @@
 import bcrypt, jwt
 import json
+import openai
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.security import HTTPBasic
@@ -7,6 +8,7 @@ from fastapi import Depends, HTTPException
 from datetime import datetime, timedelta
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer
+from app.main import logger
 from app.models.basemodel import *
 from app.db.database import *
 
@@ -125,3 +127,14 @@ def convert_sql_result_to_json(db_name):
         result["all_items"].append(dict(zip(columns, row)))
     return result
 
+def log_to_container(message:str):
+    print(f"{message}")
+
+async def get_ai_response(message: str) -> str:
+    response = openai.Completion.create(
+        model="text-davinci-003",  # Change based on the model you're using
+        prompt=message,
+        temperature=0.7,
+        max_tokens=150
+    )
+    return response.choices[0].text.strip()
